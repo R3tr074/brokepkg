@@ -10,6 +10,7 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 ## Tested on
 
 - **Kali linux**: 5.10.0-kali3-amd64
+- **Linux mint**: 4.19.0-8-amd64
 
 ## Features
 - Hide/unhide any process by sending a signal 63;
