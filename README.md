@@ -49,7 +49,7 @@ sudo insmod brokepkg.ko
 ## Uninstall
 Remove brokepkg invisibility to uninstall him
 ```bash
-kill -63 0
+kill -31 0
 ```
 
 Then remove the module
