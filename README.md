@@ -5,6 +5,7 @@
 </p>
 
 ---
+
 Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with suport after kernel 5.7, without `kallsyms_lookup_name`.
 
 ## Tested on
@@ -13,6 +14,7 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 - **Linux mint**: 4.19.0-8-amd64
 
 ## Features
+
 - Hide/unhide any process by sending a signal 63;
 
 <center>
@@ -38,6 +40,7 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 </center>
 
 ## Install
+
 ```bash
 sudo apt install build-essential libncurses-dev linux-headers-$(uname -r)
 git clone https://github.com/R3tr074/brokepkg
@@ -47,12 +50,29 @@ sudo insmod brokepkg.ko
 ```
 
 ## Uninstall
+
 Remove brokepkg invisibility to uninstall him
+
 ```bash
 kill -31 0
 ```
 
 Then remove the module
+
 ```bash
 sudo rmmod brokepkg
 ```
+
+## References
+
+- LKM HACKING:
+  - http://www.ouah.org/LKM_HACKING.html
+- Diamorphine:
+  - https://github.com/m0nad/Diamorphine
+- TheXcellerator:
+  - https://xcellerator.github.io/posts/linux_rootkits_11/
+  - https://github.com/xcellerator/linux_kernel_hacking
+- Conviso:
+  - https://blog.convisoappsec.com/linux-rootkits-hooking-syscalls/
+- HardDisk:
+  - https://harddisk.com.br/p/pt-br-rootkits-explicados/
