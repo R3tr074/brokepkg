@@ -17,27 +17,27 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 
 - Hide/unhide any process by sending a signal 63;
 
-<center>
+<p align="center">
 <img src="https://i.ibb.co/Qk618j7/hide-process.png">
-</center>
+</p align="center">
 
 - Sending a signal 31(to any pid) makes the module become (in)visible;
 
-<center>
+<p align="center">
 <img src="https://i.ibb.co/K6vX20R/module-hidden.png">
-</center>
+</p align="center">
 
 - Sending a signal 64(to any pid) makes the given user become root;
 
-<center>
+<p align="center">
 <img src="https://i.ibb.co/Fb68jQ0/root.png">
-</center>
+</p align="center">
 
 - Files or directories starting with the PREFIX become invisible;
 
-<center>
+<p align="center">
 <img src="https://i.ibb.co/N6f5WVL/file-dir-hidden.png">
-</center>
+</p align="center">
 
 ## Install
 
