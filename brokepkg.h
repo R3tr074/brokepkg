@@ -1,6 +1,12 @@
+#include <linux/init.h>
+#include <linux/dirent.h>
 #include <linux/ftrace.h>
+#include <linux/kallsyms.h>
+#include <linux/kernel.h>
 #include <linux/linkage.h>
+#include <linux/module.h>
 #include <linux/slab.h>
+#include <linux/syscalls.h>
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
