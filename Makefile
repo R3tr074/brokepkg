@@ -1,10 +1,11 @@
 obj-m := brokepkg.o
-CC := gcc -Wall
-BDIR := /lib/modules/$(shell uname -r)/build
-PWD := $(shell pwd)
+brokepkg-objs := src/main.o src/hooks.o
+CC := gcc
+KDIR := /lib/modules/$(shell uname -r)/build
+ccflags-y += -I$(PWD)/include -Wall
 
 all:
-	$(MAKE) -C $(BDIR) M=$(PWD) modules
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
 clean:
-	$(MAKE) -C $(BDIR) M=$(PWD) clean
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
