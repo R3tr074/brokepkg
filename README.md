@@ -39,6 +39,12 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 <img src="https://i.ibb.co/N6f5WVL/file-dir-hidden.png">
 </p align="center">
 
+- Sending a signal 62 to some port you make he invisible;
+
+<p align="center">
+<img src="https://www.imagemhost.com.br/images/2021/03/26/port_example.png">
+</p align="center">
+
 ## Install
 
 ```bash
