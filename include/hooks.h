@@ -14,9 +14,6 @@
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
-// magic prefix
-#define PREFIX "br0k3_n0w_h1dd3n"
-
 // comment this macro in real senary
 #define DEBUG
 
