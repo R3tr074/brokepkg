@@ -72,6 +72,8 @@ chmod +x brokecli
 sudo ./brokecli
 ```
 
+To view mini tutorial use go to [releases](https://github.com/R3tr074/brokepkg/releases/tag/0.8)
+
 ## Uninstall
 
 Remove brokepkg invisibility to uninstall him
