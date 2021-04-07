@@ -88,3 +88,5 @@ sudo rmmod brokepkg
   - https://blog.convisoappsec.com/linux-rootkits-hooking-syscalls/
 - HardDisk:
   - https://harddisk.com.br/p/pt-br-rootkits-explicados/
+- Reptile:
+  - https://github.com/f0rb1dd3n/Reptile
