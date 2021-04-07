@@ -45,10 +45,16 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 <img src="https://www.imagemhost.com.br/images/2021/03/26/port_example.png">
 </p align="center">
 
+- Full TTY/PTY shell and traffic encrypted with openssl
+
+<p align="center">
+<img src="https://www.imagemhost.com.br/images/2021/04/07/backdoor.png">
+</p align="center">
+
 ## Install
 
 ```bash
-sudo apt install build-essential libncurses-dev linux-headers-$(uname -r)
+sudo apt install build-essential libncurses-dev linux-headers-$(uname -r) socat
 git clone https://github.com/R3tr074/brokepkg
 cd brokepkg
 make
