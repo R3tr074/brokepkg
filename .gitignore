@@ -4,3 +4,5 @@
 *.symvers
 *order
 *.o
+# compiled client
+brokecli
