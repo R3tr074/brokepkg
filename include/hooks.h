@@ -20,8 +20,7 @@
 
 #define MAX_TCP_PORTS 65535
 
-#ifdef defined(CONFIG_X86_64) && \
-    (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0))
+#if defined(CONFIG_X86_64) && (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0))
 #define SYSCALL_NAME(name) ("__x64_" name)
 #else
 #define SYSCALL_NAME(name) (name)
