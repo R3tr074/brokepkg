@@ -1,4 +1,4 @@
-NAME =
+NAME = client
 CC := gcc
 CFLAGS := -Wall
 PWD := $(shell pwd)
