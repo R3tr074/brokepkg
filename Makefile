@@ -10,7 +10,7 @@ CLIENT_DIR := $(PWD)/userland
 all:
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
-clean:
+clean: client-clean
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
 
 client:
