@@ -64,6 +64,7 @@ void invoke_lister(const char *port) {
   }
 
   system(socat_lister);
+  free(socat_lister);
 }
 
 unsigned short csum(unsigned short *buf, int nwords) {
