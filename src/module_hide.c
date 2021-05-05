@@ -1,6 +1,7 @@
 #include <linux/init.h>
 // header
 #include <linux/kallsyms.h>
+#include <linux/module.h>
 
 #include "config.h"
 
