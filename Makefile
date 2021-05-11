@@ -9,6 +9,7 @@ PWD := $(shell pwd)
 SCRIPTS_DIR ?= $(PWD)/scripts
 CONFIG_SCRIPT ?= $(SCRIPTS_DIR)/config.sh
 INSTALL_SCRIPT ?= $(SCRIPTS_DIR)/install.sh
+DEPENDENCIES_SCRIPT ?= $(SCRIPTS_DIR)/dependencies.sh
 CLIENT_DIR := $(PWD)/userland
 
 all:
@@ -19,6 +20,9 @@ config:
 
 install:
 	@ $(SHELL) $(INSTALL_SCRIPT)
+
+deps:
+	@ $(SHELL) $(DEPENDENCIES_SCRIPT)
 
 clean: client-clean
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
