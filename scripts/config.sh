@@ -35,17 +35,17 @@ echo -e "$BANNER"
 
 
 
-read -p "Magic value(ex: br0k3): " magic_value
+read -ep "Magic value(ex: br0k3): " magic_value
 [[ ${#magic_value} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
 
-read -p "Magic number(ex: 1111): " magic_number
+read -ep "Magic number(ex: 1111): " magic_number
 [[ -n ${magic_number//[0-9]/} ]] && echo "Type a valid number" >&2 && exit 1
 [[ ${#magic_number} -lt 4 ]] && echo "Type at least 4 numbers" >&2 && exit 2
 
-read -p "Magic prefix(ex: br0k3): " magic_prefix
+read -ep "Magic prefix(ex: br0k3): " magic_prefix
 [[ ${#magic_prefix} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
 
-read -p "Active debug?(y/n): " debug
+read -ep "Active debug?(y/n): " debug
 [[ $debug =~ ^[Yy]$ ]] && debug_code="#define DEBUG"
 
 cat >"$CONFIG_PATH" <<EOF
