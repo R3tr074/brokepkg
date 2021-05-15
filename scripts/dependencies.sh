@@ -31,41 +31,48 @@ check_install_err() {
 
 trap ctrl_c_handler INT
 
-while [[ $(sudo -n id -u 2>&1) != 0 ]]; do
+SUDO=
+if [[ "$(id -u)" -ne 0 ]];then
+  SUDO=$(command -v sudo 2>/dev/null)
+
+  [[ -z $SUDO ]] && { err "Error: please, run as root" ;exit 4; }
+
+  while [[ $(sudo -n id -u 2>&1) != 0 ]]; do
     sudo -v -p "Password for $(whoami): " &>/dev/null
-done
+  done
+fi
 
 msg "Installing build-essential, libncurses, linux-headers and socat"
 
 if [[ ! -z $(command -v apt-get) ]]; then
     msg "Detect apt package manager"
 
-    sudo apt-get -y update
-    sudo apt-get -y install build-essential libncurses-dev linux-headers-$(uname -r) socat
+    $SUDO apt-get -y update
+    $SUDO apt-get -y install build-essential libncurses-dev linux-headers-$(uname -r) socat
 
     check_install_err $? "apt"
 
 elif [[ ! -z $(command -v apk) ]]; then
     msg "Detect apk package manager"
 
-    sudo apk --update add gcc make g++ ncurses-dev linux-headers socat
+    $SUDO apk --update add gcc make g++ ncurses-dev linux-headers socat
 
     check_install_err $? "apk"
 elif [[ ! -z $(command -v pacman) ]]; then
     msg "Detect pacman package manager"
 
-    sudo pacman -Sy
-    sudo pacman -S --noconfirm base-devel ncurses linux-headers socat
+    $SUDO pacman -Sy
+    $SUDO pacman -S --noconfirm base-devel ncurses linux-headers socat
     check_install_err $? "pacman"
 elif [[ ! -z $(command -v yum) ]]; then
     msg "Detect yum package manager"
 
-    sudo yum -y install gcc gcc-c++ make ncurses-devel kernel-devel kernel-headers socat
+    $SUDO yum -y install gcc gcc-c++ make ncurses-devel kernel-devel kernel-headers socat
     check_install_err $? "yum"
 elif [[ ! -z $(command -v dnf) ]]; then
     msg "Detect dnf package manager"
 
-    sudo dnf -y install ncurses-devel make automake gcc gcc-c++ kernel-devel kernel-headers socat
+    $SUDO dnf -y install ncurses-devel make automake gcc gcc-c++ kernel-devel kernel-headers socat
     check_install_err $? "dnf"
 else
     warn "Not found package manager, you need install manually the \"build-essential, libncurses-dev, socat and linux-headers\""
