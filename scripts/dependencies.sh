@@ -32,9 +32,12 @@ check_install_err() {
 trap ctrl_c_handler INT
 
 SUDO=
+# If not are root
 if [[ "$(id -u)" -ne 0 ]];then
+  # Try find sudo path
   SUDO=$(command -v sudo 2>/dev/null)
 
+  # If not found sudo and not are root
   [[ -z $SUDO ]] && { err "Error: please, run as root" ;exit 4; }
 
   while [[ $(sudo -n id -u 2>&1) != 0 ]]; do
