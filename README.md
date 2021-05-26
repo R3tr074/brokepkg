@@ -55,7 +55,7 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 
 ## Install
 
-### To install lkm, see [wiki page](https://github.com/R3tr074/brokepkg/wiki)
+### To install lkm, see [wiki page](https://github.com/R3tr074/brokepkg/wiki/install)
 
 ### To install client run this:
 
