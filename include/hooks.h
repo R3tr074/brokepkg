@@ -28,6 +28,12 @@
 
 #define HOOK_N(_name, _hook, _orig) HOOK(SYSCALL_NAME(_name), _hook, _orig)
 
+/*
+ * There are two ways of preventing vicious recursive loops when hooking:
+ * - detect recusion using function return address (USE_FENTRY_OFFSET = 0)
+ * - avoid recusion by jumping over the ftrace call (USE_FENTRY_OFFSET = 1)
+ * https://github.com/ilammy/ftrace-hook/blob/ff7bad4cd3de3d5ed8fe2baf8a1676d1cec7b5d8/ftrace_hook.c#L56
+ */
 #define USE_FENTRY_OFFSET 0
 #if !USE_FENTRY_OFFSET
 #pragma GCC optimize("-fno-optimize-sibling-calls")
@@ -45,7 +51,7 @@ struct ftrace_hook {
 int fh_resolve_hook_address(struct ftrace_hook *hook);
 
 void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip,
-                             struct ftrace_ops *ops, struct pt_regs *regs);
+                        struct ftrace_ops *ops, struct ftrace_regs *fregs);
 
 int fh_install_hook(struct ftrace_hook *hook);
 

@@ -10,6 +10,17 @@
 static struct kprobe kp = {.symbol_name = "kallsyms_lookup_name"};
 #endif
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,11,0)
+#define FTRACE_OPS_FL_RECURSION FTRACE_OPS_FL_RECURSION_SAFE
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,11,0)
+#define ftrace_regs pt_regs
+static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs) {
+  return fregs;
+}
+#endif
+
 int fh_resolve_hook_address(struct ftrace_hook *hook) {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 7, 0)
   typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
@@ -37,7 +48,8 @@ int fh_resolve_hook_address(struct ftrace_hook *hook) {
 }
 
 void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip,
-                             struct ftrace_ops *ops, struct pt_regs *regs) {
+                             struct ftrace_ops *ops, struct ftrace_regs *fregs) {
+  struct pt_regs *regs = ftrace_get_regs(fregs);
   struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
 
 #if USE_FENTRY_OFFSET
@@ -54,7 +66,7 @@ int fh_install_hook(struct ftrace_hook *hook) {
   if (err) return err;
 
   hook->ops.func = fh_ftrace_thunk;
-  hook->ops.flags = FTRACE_OPS_FL_SAVE_REGS | FTRACE_OPS_FL_RECURSION_SAFE |
+  hook->ops.flags = FTRACE_OPS_FL_SAVE_REGS | FTRACE_OPS_FL_RECURSION |
                     FTRACE_OPS_FL_IPMODIFY;
 
   err = ftrace_set_filter_ip(&hook->ops, hook->address, 0, 0);
