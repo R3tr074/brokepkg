@@ -36,24 +36,28 @@ echo -e "$BANNER"
 
 
 read -ep "Magic value(ex: br0k3): " magic_value
+[[ ! ${magic_value} ]] && magic_value="br0k3"
 [[ ${#magic_value} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
 
 read -ep "Magic number(ex: 1111): " magic_number
+[[ ! ${magic_number} ]] && magic_number="1111"
 [[ -n ${magic_number//[0-9]/} ]] && echo "Type a valid number" >&2 && exit 1
 [[ ${#magic_number} -lt 4 ]] && echo "Type at least 4 numbers" >&2 && exit 2
 
 read -ep "Magic prefix(ex: br0k3): " magic_prefix
+[[ ! ${magic_prefix} ]] && magic_prefix="br0k3_n0w_h1dd3n"
 [[ ${#magic_prefix} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
 
 read -ep "Active debug?(y/n): " debug
-[[ $debug =~ ^[Yy]$ ]] && debug_code="#define DEBUG"
+[[ ! ${debug} ]] && debug="n"
 
-cat >"$CONFIG_PATH" <<EOF
-${debug_code}
-#define PREFIX "${magic_prefix}"
-#define MAGIC_VALUE "${magic_value}"
-#define MAGIC_NUMBER ${magic_number}
-EOF
+config_header=""
+config_header+="#define PREFIX \"${magic_prefix}\"\n"
+config_header+="#define MAGIC_VALUE \"${magic_value}\"\n"
+config_header+="#define MAGIC_NUMBER ${magic_number}\n"
+[[ $debug =~ ^[Yy]$ ]] && config_header+="#define DEBUG\n"
+
+echo -ne "${config_header}" > "$CONFIG_PATH"
 
 echo -e "$bld$f1▬▬▬▬▬ $f2▬▬▬▬▬ $f3▬▬▬▬▬ $f4▬▬▬▬▬ $f5▬▬▬▬▬ $f6▬▬▬▬▬${NO_COLOR}"
 echo -e "config.h content:"
