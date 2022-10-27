@@ -36,7 +36,7 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 <img src="https://i.ibb.co/Fb68jQ0/root.png">
 </p align="center">
 
-- Files or directories starting with the PREFIX become invisible;
+- Files or directories contain the **MAGIC_HIDE** become invisible;
 
 <p align="center">
 <img src="https://i.ibb.co/N6f5WVL/file-dir-hidden.png">

