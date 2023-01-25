@@ -62,21 +62,9 @@ $(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
 
 ## Install
 
-### To install lkm, see [wiki page](https://github.com/R3tr074/brokepkg/wiki/install)
+### To install lkm, see [wiki page](https://github.com/R3tr074/brokepkg/wiki/Install#brokepkg-installation:)
 
-### To install client run this:
-
-```bash
-# client
-sudo apt install socat
-brokecli="https://git.io/JYAVw" # to 64 bits
-brokecli="https://git.io/JYAVK" # to 32 bits
-wget -q $brokecli -O brokecli
-chmod +x brokecli
-sudo ./brokecli
-```
-
-To view mini tutorial use go to [releases](https://github.com/R3tr074/brokepkg/releases/tag/0.8)
+### To install/usage client see [wike page](https://github.com/R3tr074/brokepkg/wiki/Install#cli)
 
 ## Uninstall
 
