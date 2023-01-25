@@ -10,12 +10,16 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 
 ## Tested on
 
+```bash
+$(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
+```
+
 - **Ubuntu 22.04.1 LTS**: 5.17.0-1026-oem
 - **Arch linux**: 5.13.12-arch1-1
 - **Kali linux**: 5.10.0-kali3-amd64
 - **Linux mint**: 4.19.0-8-amd64
-- **Debian 9(stretch)**: 4.9.0-15-amd64
 - **Ubuntu 18.04.6 LTS**: 4.15.0-194-generic
+- **Debian 9(stretch)**: 4.9.0-15-amd64
 - **Ubuntu 16.04.6 LTS**: 4.4.0-142-generic
 
 ## Features
