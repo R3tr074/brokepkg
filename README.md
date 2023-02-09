@@ -62,9 +62,11 @@ $(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
 
 ## Install
 
-### To install lkm, see [wiki page](https://github.com/R3tr074/brokepkg/wiki/Install#brokepkg-installation:)
+To install the rootkit, see this [wiki page](https://github.com/R3tr074/brokepkg/wiki/Install#brokepkg-installation:)
 
-### To install/usage client see [wike page](https://github.com/R3tr074/brokepkg/wiki/Install#cli)
+## Usage
+
+You can see a usage manual [here](https://github.com/R3tr074/brokepkg/wiki/Usage)
 
 ## Uninstall
 
