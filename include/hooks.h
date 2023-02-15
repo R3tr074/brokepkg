@@ -24,7 +24,7 @@
 #define HOOK(_name, _hook, _orig) \
   { .name = (_name), .function = (_hook), .original = (_orig), }
 
-#define HOOK_N(_name, _hook, _orig) HOOK(SYSCALL_NAME(_name), _hook, _orig)
+#define HOOK_SYSCALL(_name, _hook, _orig) HOOK(SYSCALL_NAME(_name), _hook, _orig)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0)
 #define ftrace_regs pt_regs
