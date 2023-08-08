@@ -11,9 +11,10 @@ Brokepkg is a LKM rootkit for Linux Kernels 2.6.x/3.x/4.x/5.x and ARM64, with su
 ## Tested on
 
 ```bash
-$(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
+echo $(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
 ```
 
+- **Ubuntu 23.04**: 6.2.0-26-generic
 - **Ubuntu 22.04.1 LTS**: 5.17.0-1026-oem
 - **Arch linux**: 5.13.12-arch1-1
 - **Kali linux**: 5.10.0-kali3-amd64
@@ -27,37 +28,37 @@ $(head -1 /etc/os-release|tr -d '"'|cut -d= -f2): $(uname -r)
 - Hide/unhide any process by sending a signal 63;
 
 <p align="center">
-<img src="https://i.ibb.co/Qk618j7/hide-process.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-hidden-process.png">
 </p align="center">
 
 - Sending a signal 31(to any pid) makes the module become (in)visible;
 
 <p align="center">
-<img src="https://i.ibb.co/K6vX20R/module-hidden.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-hidden-module.png">
 </p align="center">
 
 - Sending a signal 64(to any pid) makes the given user become root;
 
 <p align="center">
-<img src="https://i.ibb.co/Fb68jQ0/root.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-signal-to-root.png">
 </p align="center">
 
 - Files or directories contain the **MAGIC_HIDE** become invisible;
 
 <p align="center">
-<img src="https://i.ibb.co/N6f5WVL/file-dir-hidden.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-hidden-files.png">
 </p align="center">
 
 - Sending a signal 62 to some port you make he invisible;
 
 <p align="center">
-<img src="https://www.imagemhost.com.br/images/2021/03/26/port_example.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-hidden-ports.png">
 </p align="center">
 
 - Full TTY/PTY shell and traffic encrypted with openssl
 
 <p align="center">
-<img src="https://www.imagemhost.com.br/images/2021/04/07/backdoor.png">
+<img src="https://retr0.zip/assets/imgs/brokepkg-tty-rev-shell.png">
 </p align="center">
 
 ## Install
